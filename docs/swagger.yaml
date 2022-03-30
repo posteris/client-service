@@ -5,14 +5,8 @@ definitions:
     type: object
   models.Client:
     properties:
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
       email:
         type: string
-      id:
-        type: integer
       name:
         maxLength: 127
         minLength: 2
@@ -20,8 +14,6 @@ definitions:
       surname:
         maxLength: 255
         minLength: 2
-        type: string
-      updatedAt:
         type: string
       uuid:
         type: string

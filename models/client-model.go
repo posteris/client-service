@@ -3,16 +3,15 @@ package models
 import (
 	"github.com/go-playground/validator"
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 )
 
 //Client model
 type Client struct {
-	gorm.Model `json:"-"`
-	UUID       uuid.UUID `json:"uuid"    validate:"omitempty,uuid"          gorm:"type:uuid;default:uuid_generate_v4()"`
-	Name       string    `json:"name"    validate:"required,min=2,max=127"  gorm:"size:127;not null"`
-	Surname    string    `json:"surname" validate:"required,min=2,max=255"  gorm:"size: 255;not null"`
-	Email      string    `json:"email"   validate:"required,email"          gorm:"size:125;not nul"`
+	Model   `json:"-" swagger:"ignore"`
+	UUID    uuid.UUID `json:"uuid"    validate:"omitempty,uuid"          gorm:"type:uuid;default:uuid_generate_v4()"`
+	Name    string    `json:"name"    validate:"required,min=2,max=127"  gorm:"size:127;not null"`
+	Surname string    `json:"surname" validate:"required,min=2,max=255"  gorm:"size: 255;not null"`
+	Email   string    `json:"email"   validate:"required,email"          gorm:"size:125;not nul"`
 }
 
 //CreateNewClient function to create new client. This function validate the model after create it. In case of validation

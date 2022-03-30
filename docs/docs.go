@@ -126,17 +126,8 @@ const docTemplate = `{
                 "surname"
             ],
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "name": {
                     "type": "string",
@@ -147,9 +138,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 255,
                     "minLength": 2
-                },
-                "updatedAt": {
-                    "type": "string"
                 },
                 "uuid": {
                     "type": "string"
