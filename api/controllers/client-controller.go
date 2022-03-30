@@ -7,6 +7,17 @@ import (
 	validate "github.com/posteris/custom-validate"
 )
 
+// ListAllClients godoc
+// @Summary      List all clients
+// @Description  Perform a paginated search through the client repository geting all active users
+// @Tags         Client
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  []models.Client
+// @Failure 400 {object} fiber.Map
+// @Failure 404 {object} fiber.Map
+// @Failure 500 {object} fiber.Map
+// @Router       /api/v1/clientes/{id} [get]
 func ListAllClients(c *fiber.Ctx) error {
 	c.Send([]byte("List All Users"))
 
@@ -19,6 +30,17 @@ func FindClientById(c *fiber.Ctx) error {
 	return nil
 }
 
+// CreateClient controller to create new client
+// @Summary      Create new Client
+// @Description  Create a new client and persist it at the database. This action can be done by sync and async way. By default, the sync is selected, but, when the parameter async is set as true, the system will assume that the implementation will perform the request asynchronously, and the requester should wait by the response at a callback URL.
+// @Tags         Client
+// @Accept       json
+// @Produce      json
+// @Success      201 {object}  models.Client
+// @Failure 	 415 {object} fiber.Map the content is not a valid JSON
+// @Failure 	 400 {object} []validate.CustomError
+// @Failure 	 500 {object} fiber.Map error when try to save object
+// @Router       /api/v1/clientes [post]
 func CreateClient(c *fiber.Ctx) error {
 	client := new(models.Client)
 

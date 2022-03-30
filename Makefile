@@ -1,3 +1,6 @@
+swag:
+	swag init --dir ./,./api/controllers --parseDependency --parseInternal
+
 build:
 	go build -o server main.go
 
