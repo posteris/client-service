@@ -1,7 +1,16 @@
 basePath: /
 definitions:
-  fiber.Map:
-    additionalProperties: true
+  errors.DefaultError:
+    properties:
+      message:
+        type: string
+    type: object
+  errors.ValidationError:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
     type: object
   models.Client:
     properties:
@@ -21,15 +30,6 @@ definitions:
     - email
     - name
     - surname
-    type: object
-  validate.CustomError:
-    properties:
-      field:
-        type: string
-      tag:
-        type: string
-      value:
-        type: string
     type: object
 host: localhost:8080
 info:
@@ -52,7 +52,7 @@ paths:
         can be done by sync and async way. By default, the sync is selected, but,
         when the parameter async is set as true, the system will assume that the implementation
         will perform the request asynchronously, and the requester should wait by
-        the response at a callback URL.
+        the response at the provided callback.
       produces:
       - application/json
       responses:
@@ -64,16 +64,16 @@ paths:
           description: Bad Request
           schema:
             items:
-              $ref: '#/definitions/validate.CustomError'
+              $ref: '#/definitions/errors.ValidationError'
             type: array
         "415":
           description: Unsupported Media Type
           schema:
-            $ref: '#/definitions/fiber.Map'
+            $ref: '#/definitions/errors.DefaultError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/fiber.Map'
+            $ref: '#/definitions/errors.DefaultError'
       summary: Create new Client
       tags:
       - Client
@@ -95,15 +95,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/fiber.Map'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/fiber.Map'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/fiber.Map'
+            $ref: '#/definitions/errors.DefaultError'
       summary: List all clients
       tags:
       - Client

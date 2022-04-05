@@ -26,7 +26,7 @@ const docTemplate = `{
     "paths": {
         "/api/v1/clientes": {
             "post": {
-                "description": "Create a new client and persist it at the database. This action can be done by sync and async way. By default, the sync is selected, but, when the parameter async is set as true, the system will assume that the implementation will perform the request asynchronously, and the requester should wait by the response at a callback URL.",
+                "description": "Create a new client and persist it at the database. This action can be done by sync and async way. By default, the sync is selected, but, when the parameter async is set as true, the system will assume that the implementation will perform the request asynchronously, and the requester should wait by the response at the provided callback.",
                 "consumes": [
                     "application/json"
                 ],
@@ -49,20 +49,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/validate.CustomError"
+                                "$ref": "#/definitions/errors.ValidationError"
                             }
                         }
                     },
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "$ref": "#/definitions/fiber.Map"
+                            "$ref": "#/definitions/errors.DefaultError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/fiber.Map"
+                            "$ref": "#/definitions/errors.DefaultError"
                         }
                     }
                 }
@@ -94,19 +94,7 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/fiber.Map"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/fiber.Map"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/fiber.Map"
+                            "$ref": "#/definitions/errors.DefaultError"
                         }
                     }
                 }
@@ -114,9 +102,24 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "fiber.Map": {
+        "errors.DefaultError": {
             "type": "object",
-            "additionalProperties": true
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "errors.ValidationError": {
+            "type": "object",
+            "properties": {
+                "field": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
         },
         "models.Client": {
             "type": "object",
@@ -140,20 +143,6 @@ const docTemplate = `{
                     "minLength": 2
                 },
                 "uuid": {
-                    "type": "string"
-                }
-            }
-        },
-        "validate.CustomError": {
-            "type": "object",
-            "properties": {
-                "field": {
-                    "type": "string"
-                },
-                "tag": {
-                    "type": "string"
-                },
-                "value": {
                     "type": "string"
                 }
             }
