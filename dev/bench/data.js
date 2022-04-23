@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1650684665753,
+  "lastUpdate": 1650734716008,
   "repoUrl": "https://github.com/posteris/client-service",
   "entries": {
     "Benchmark": [
@@ -106,6 +106,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "BenchmarkInitDatabase/SQLite",
             "value": 0.0008383,
+            "unit": "ns/op",
+            "extra": "1000000000 times\n2 procs"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "gsdenys@gmail.com",
+            "name": "Denys G. Santos",
+            "username": "gsdenys"
+          },
+          "committer": {
+            "email": "gsdenys@gmail.com",
+            "name": "Denys G. Santos",
+            "username": "gsdenys"
+          },
+          "distinct": true,
+          "id": "f666f86f96200f47461168f211b2eaffefbf26c3",
+          "message": "simplify database connection",
+          "timestamp": "2022-04-23T12:23:23-03:00",
+          "tree_id": "e1e12730198973fbc790e1c68f983eb1582966dd",
+          "url": "https://github.com/posteris/client-service/commit/f666f86f96200f47461168f211b2eaffefbf26c3"
+        },
+        "date": 1650734715590,
+        "tool": "go",
+        "benches": [
+          {
+            "name": "BenchmarkInitDatabase/Clickhouse",
+            "value": 0.01011,
+            "unit": "ns/op",
+            "extra": "1000000000 times\n2 procs"
+          },
+          {
+            "name": "BenchmarkInitDatabase/MSSQL",
+            "value": 0.009361,
+            "unit": "ns/op",
+            "extra": "1000000000 times\n2 procs"
+          },
+          {
+            "name": "BenchmarkInitDatabase/MySQL",
+            "value": 0.009676,
+            "unit": "ns/op",
+            "extra": "1000000000 times\n2 procs"
+          },
+          {
+            "name": "BenchmarkInitDatabase/PostgreSQL",
+            "value": 0.04209,
+            "unit": "ns/op",
+            "extra": "1000000000 times\n2 procs"
+          },
+          {
+            "name": "BenchmarkInitDatabase/SQLite",
+            "value": 0.000681,
             "unit": "ns/op",
             "extra": "1000000000 times\n2 procs"
           }
