@@ -4,11 +4,11 @@ go 1.17
 
 require (
 	github.com/arsmn/fiber-swagger/v2 v2.31.1
-	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/gofiber/fiber/v2 v2.31.0
 	github.com/google/uuid v1.3.0
 	github.com/posteris/commons v1.2.2
 	github.com/posteris/database v1.1.0
+	github.com/stretchr/testify v1.7.1
 	github.com/swaggo/swag v1.8.1
 	gorm.io/gorm v1.23.4
 )
@@ -25,7 +25,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/testify v1.7.1 // indirect
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
 	golang.org/x/net v0.0.0-20220325170049-de3da57026de // indirect
@@ -66,7 +65,6 @@ require (
 	github.com/valyala/fasthttp v1.34.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.0.0-20220330033206-e17cdc41300f // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gorm.io/driver/clickhouse v0.3.1 // indirect
 	gorm.io/driver/mysql v1.3.3 // indirect
 	gorm.io/driver/postgres v1.3.4 // indirect

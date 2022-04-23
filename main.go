@@ -23,7 +23,6 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-
 	database.InitDatabase()
 
 	app := fiber.New()

@@ -9,7 +9,6 @@ import (
 )
 
 func BenchmarkInitDatabase(b *testing.B) {
-
 	//obtains the connection database parameters from the ci-database-starter
 	//test module
 	tests := conndata.GetTestData()

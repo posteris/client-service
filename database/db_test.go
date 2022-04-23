@@ -11,7 +11,6 @@ import (
 )
 
 func TestInitDatabase(t *testing.T) {
-
 	//obtains the connection database parameters from the ci-database-starter
 	//test module
 	tests := conndata.GetTestData()

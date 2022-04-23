@@ -28,7 +28,10 @@ func FindClientById(c *fiber.Ctx) error {
 
 // CreateClient controller to create new client
 // @Summary      Create new Client
-// @Description  Create a new client and persist it at the database. This action can be done by sync and async way. By default, the sync is selected, but, when the parameter async is set as true, the system will assume that the implementation will perform the request asynchronously, and the requester should wait by the response at the provided callback.
+// @Description  Create a new client and persist it at the database. This action can be done by \
+// sync and async way. By default, the sync is selected, but, when the parameter async is set as \
+// true, the system will assume that the implementation will perform the request asynchronously, \
+//and the requester should wait by the response at the provided callback.
 // @Tags         Client
 // @Accept       json
 // @Produce      json
@@ -37,7 +40,7 @@ func FindClientById(c *fiber.Ctx) error {
 // @Failure 	 400 {object} []errors.ValidationError
 // @Failure 	 500 {object} errors.DefaultError
 // @Router       /api/v1/clientes [post]
-func CreateClient(c *fiber.Ctx) error {
+func CreateClient(cli *fiber.Ctx) error {
 	client := new(models.Client)
 
 	fiber.SetParserDecoder(fiber.ParserConfig{
@@ -45,25 +48,25 @@ func CreateClient(c *fiber.Ctx) error {
 		ZeroEmpty:         true,
 	})
 
-	if err := c.BodyParser(client); err != nil {
-		return c.Status(fiber.StatusUnsupportedMediaType).JSON(
+	if err := cli.BodyParser(client); err != nil {
+		return cli.Status(fiber.StatusUnsupportedMediaType).JSON(
 			errors.CreateDefaultError(err.Error()),
 		)
 	}
 
 	if err := validation.ValidateModel(client); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+		return cli.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
-	async := parameters.IsAsyncRequest(c)
+	async := parameters.IsAsyncRequest(cli)
 
 	if err := services.Create(client, async); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(
+		return cli.Status(fiber.StatusInternalServerError).JSON(
 			errors.CreateDefaultError(err.Error()),
 		)
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(client)
+	return cli.Status(fiber.StatusCreated).JSON(client)
 }
 
 func UpdateClientById(c *fiber.Ctx) error {
