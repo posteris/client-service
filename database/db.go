@@ -8,35 +8,39 @@ import (
 	"gorm.io/gorm"
 )
 
-var factory *database.Factory
+//variable to store the databases instance
+var databaseInstance *gorm.DB
 
-//
-const defaultInstance string = "default"
+//defaultInstance that defines database instance name. It was created to
+//simplify the creation and recovery default database instance
+// const defaultInstance string = "default"
 
 //InitDatabase function to start the database conection
 func InitDatabase() {
-	factory = database.GetFactory()
-
-	created := factory.AddFromEnv(defaultInstance, nil)
-
-	if !created {
+	gormInstance, err := database.NewFromEnv(nil)
+	if err != nil {
 		log.Fatal("Database connection error!")
 	}
+
+	databaseInstance = gormInstance
 
 	automigrate()
 }
 
-//automigrate function make migrations
+//automigrate function to execute migrations. Inside this function should exist
+//all migrations execution, it's a way to concetrate the migrations in just one
+//place.
 func automigrate() {
-	instance := factory.GetInstance(defaultInstance)
-
-	err := instance.AutoMigrate(&models.Client{})
+	err := databaseInstance.AutoMigrate(&models.Client{})
 	if err != nil {
 		log.Fatalf("Migration error: %v", err)
 	}
 }
 
-// obtains the database instance
+//GetInstance function to recovery the datault migration. Note that this function
+//uses the defaultInstance variabel to return the default instance.
+//if you want to have mor than one *gorm.DB instance you should to expose the
+//factory variable to allows to requeste the instance directly.
 func GetInstance() *gorm.DB {
-	return factory.GetInstance(defaultInstance)
+	return databaseInstance
 }
