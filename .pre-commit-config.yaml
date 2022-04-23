@@ -3,21 +3,6 @@ repos:
   rev: v0.5.0
   hooks:
     - id: go-vet
-      name: 'go vet'
-      files: '\.go$'
-      language: 'script'
-      description: "Runs `go vet`, requires golang"
-
     - id: golangci-lint
-      name: 'golangci-lint'
-      files: ./...
-      types: [go]
-      language: 'script'
-      pass_filenames: false
-      description: "Runs `golangci-lint`, requires https://github.com/golangci/golangci-lint"
     - id: go-mod-tidy 
-      name: 'go-mod-tidy'
-      files: '\.go$'
-      language: 'script'
-      description: "Runs `go mod tidy -v`, requires golang"
     - id: go-unit-tests
