@@ -1,11 +1,14 @@
 package main
 
 import (
+	"log"
+
 	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/posteris/client-service/api/middleware"
 	"github.com/posteris/client-service/api/router"
+	"github.com/posteris/client-service/database"
 	_ "github.com/posteris/client-service/docs"
 )
 
@@ -21,6 +24,8 @@ import (
 // @BasePath /
 func main() {
 
+	database.InitDatabase()
+
 	app := fiber.New()
 
 	app.Get("/dashboard", monitor.New())
@@ -31,5 +36,8 @@ func main() {
 	//register routes
 	router.SetupRoutes(app)
 
-	app.Listen(":8000")
+	err := app.Listen(":8000")
+	if err != nil {
+		log.Fatalf("Startup error: %v", err)
+	}
 }

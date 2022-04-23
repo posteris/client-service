@@ -1,0 +1,18 @@
+
+linters:
+  enable:
+    - errorlint
+    - unparam
+    - thelper
+    - nolintlint
+    - lll
+    - tenv
+    - varnamelen
+    - whitespace
+
+linters-settings:
+  staticcheck:
+    checks:
+      - all
+      - 'S1020'
+      - 'SA4016'

@@ -146,3 +146,6 @@ fabric.properties
 
 server
 main
+*.db
+
+docker-compose.yml

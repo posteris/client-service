@@ -6,7 +6,7 @@ import (
 	"github.com/posteris/client-service/services"
 	"github.com/posteris/commons/errors"
 	"github.com/posteris/commons/parameters"
-	"github.com/posteris/commons/parser"
+	"github.com/posteris/commons/validation"
 )
 
 // ListAllClients godoc
@@ -19,15 +19,11 @@ import (
 // @Failure 400 {object} errors.DefaultError
 // @Router       /api/v1/clientes/{id} [get]
 func ListAllClients(c *fiber.Ctx) error {
-	c.Send([]byte("List All Users"))
-
-	return nil
+	return c.Status(fiber.StatusNotImplemented).JSON("{\"message\": \"Not Implemented Yet\"}")
 }
 
 func FindClientById(c *fiber.Ctx) error {
-	c.Send([]byte("List User by Id"))
-
-	return nil
+	return c.Status(fiber.StatusNotImplemented).JSON("{\"message\": \"Not Implemented Yet\"}")
 }
 
 // CreateClient controller to create new client
@@ -44,26 +40,24 @@ func FindClientById(c *fiber.Ctx) error {
 func CreateClient(c *fiber.Ctx) error {
 	client := new(models.Client)
 
-	if err := parser.BodyParser(client, c); err != nil {
+	fiber.SetParserDecoder(fiber.ParserConfig{
+		IgnoreUnknownKeys: false,
+		ZeroEmpty:         true,
+	})
 
+	if err := c.BodyParser(client); err != nil {
+		return c.Status(fiber.StatusUnsupportedMediaType).JSON(
+			errors.CreateDefaultError(err.Error()),
+		)
 	}
 
-	// if err := c.BodyParser(client); err != nil {
-	// 	return c.Status(fiber.StatusUnsupportedMediaType).JSON(
-	// 		errors.CreateDefaultError(err.Error()),
-	// 	)
-	// }
-
-	// if err := validate.ValidateModel(client); err != nil {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(err)
-	// }
-
-	if parameters.IsAsyncRequest(c) {
-
-		return c.Status(fiber.StatusCreated).JSON(client)
+	if err := validation.ValidateModel(client); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
-	if err := services.CreateClient(client); err != nil {
+	async := parameters.IsAsyncRequest(c)
+
+	if err := services.Create(client, async); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(
 			errors.CreateDefaultError(err.Error()),
 		)
@@ -73,13 +67,9 @@ func CreateClient(c *fiber.Ctx) error {
 }
 
 func UpdateClientById(c *fiber.Ctx) error {
-	c.Send([]byte("Update User by Id"))
-	1
-	return nil
+	return c.Status(fiber.StatusNotImplemented).JSON("{\"message\": \"Not Implemented Yet\"}")
 }
 
 func DeleteClientById(c *fiber.Ctx) error {
-	c.Send([]byte("Delete User by Id"))
-
-	return nil
+	return c.Status(fiber.StatusNotImplemented).JSON("{\"message\": \"Not Implemented Yet\"}")
 }
