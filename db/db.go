@@ -1,4 +1,4 @@
-package database
+package db
 
 import (
 	"log"
@@ -23,18 +23,10 @@ func InitDatabase() {
 	}
 
 	databaseInstance = gormInstance
-
-	automigrate()
 }
 
-//automigrate function to execute migrations. Inside this function should exist
-//all migrations execution, it's a way to concetrate the migrations in just one
-//place.
-func automigrate() {
-	err := databaseInstance.AutoMigrate(&models.Client{})
-	if err != nil {
-		log.Fatalf("Migration error: %v", err)
-	}
+func Automigrate() {
+	databaseInstance.AutoMigrate(&models.Client{})
 }
 
 //GetInstance function to recovery the datault migration. Note that this function

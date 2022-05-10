@@ -8,22 +8,21 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/posteris/client-service/api/middleware"
 	"github.com/posteris/client-service/api/router"
-	"github.com/posteris/client-service/database"
+	"github.com/posteris/client-service/db"
 	_ "github.com/posteris/client-service/docs"
 )
 
 // @title Client Registration service
 // @version 1.0
-// @description This is a sample swagger for Fiber
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.email fiber@swagger.io
+// @description Client registration service that enable to manage clients, their addresses, their contacts and their documents. In this service is also included the client registration
+// @termsOfService http://posteris.io/terms/
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:8080
 // @BasePath /
 func main() {
-	database.InitDatabase()
+	db.InitDatabase()
+	db.Automigrate()
 
 	app := fiber.New()
 

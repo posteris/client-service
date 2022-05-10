@@ -10,11 +10,8 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "email": "fiber@swagger.io"
-        },
+        "termsOfService": "http://posteris.io/terms/",
+        "contact": {},
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -26,7 +23,7 @@ const docTemplate = `{
     "paths": {
         "/api/v1/clientes": {
             "post": {
-                "description": "Create a new client and persist it at the database. This action can be done by sync and async way. By default, the sync is selected, but, when the parameter async is set as true, the system will assume that the implementation will perform the request asynchronously, and the requester should wait by the response at the provided callback.",
+                "description": "Create a new client and persist it at the database.",
                 "consumes": [
                     "application/json"
                 ],
@@ -130,20 +127,21 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 125
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string",
                     "maxLength": 127,
-                    "minLength": 2
+                    "minLength": 3
                 },
                 "surname": {
                     "type": "string",
                     "maxLength": 255,
-                    "minLength": 2
-                },
-                "uuid": {
-                    "type": "string"
+                    "minLength": 3
                 }
             }
         }
@@ -157,7 +155,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Client Registration service",
-	Description:      "This is a sample swagger for Fiber",
+	Description:      "Client registration service that enable to manage clients and their addresses, contacts and documents.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
