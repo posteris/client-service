@@ -15,16 +15,17 @@ definitions:
   models.Client:
     properties:
       email:
+        maxLength: 125
         type: string
+      id:
+        type: integer
       name:
         maxLength: 127
-        minLength: 2
+        minLength: 3
         type: string
       surname:
         maxLength: 255
-        minLength: 2
-        type: string
-      uuid:
+        minLength: 3
         type: string
     required:
     - email
@@ -33,14 +34,13 @@ definitions:
     type: object
 host: localhost:8080
 info:
-  contact:
-    email: fiber@swagger.io
-    name: API Support
-  description: This is a sample swagger for Fiber
+  contact: {}
+  description: Client registration service that enable to manage clients and their
+    addresses, contacts and documents.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
+  termsOfService: http://posteris.io/terms/
   title: Client Registration service
   version: "1.0"
 paths:
@@ -48,11 +48,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a new client and persist it at the database. This action
-        can be done by sync and async way. By default, the sync is selected, but,
-        when the parameter async is set as true, the system will assume that the implementation
-        will perform the request asynchronously, and the requester should wait by
-        the response at the provided callback.
+      description: Create a new client and persist it at the database.
       produces:
       - application/json
       responses:

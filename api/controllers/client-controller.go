@@ -5,7 +5,6 @@ import (
 	"github.com/posteris/client-service/models"
 	"github.com/posteris/client-service/services"
 	"github.com/posteris/commons/errors"
-	"github.com/posteris/commons/parameters"
 	"github.com/posteris/commons/validation"
 )
 
@@ -28,10 +27,7 @@ func FindClientById(c *fiber.Ctx) error {
 
 // CreateClient controller to create new client
 // @Summary      Create new Client
-// @Description  Create a new client and persist it at the database. This action can be done by \
-// sync and async way. By default, the sync is selected, but, when the parameter async is set as \
-// true, the system will assume that the implementation will perform the request asynchronously, \
-//and the requester should wait by the response at the provided callback.
+// @Description  Create a new client and persist it at the database.
 // @Tags         Client
 // @Accept       json
 // @Produce      json
@@ -58,9 +54,7 @@ func CreateClient(cli *fiber.Ctx) error {
 		return cli.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
-	async := parameters.IsAsyncRequest(cli)
-
-	if err := services.Create(client, async); err != nil {
+	if err := services.Create(client); err != nil {
 		return cli.Status(fiber.StatusInternalServerError).JSON(
 			errors.CreateDefaultError(err.Error()),
 		)

@@ -1,14 +1,12 @@
 package services
 
 import (
-	"github.com/posteris/client-service/database"
+	"github.com/posteris/client-service/db"
 	"github.com/posteris/client-service/models"
 )
 
-func Create(client *models.Client, async bool) error {
-	dbInstance := database.GetInstance()
+func Create(client *models.Client) error {
+	dbInstance := db.GetInstance()
 
-	dbInstance.Save(client).Commit()
-
-	return nil
+	return dbInstance.Create(client).Error
 }
