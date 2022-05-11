@@ -14,11 +14,13 @@ definitions:
     type: object
   models.Client:
     properties:
+      active:
+        type: boolean
       email:
         maxLength: 125
         type: string
       id:
-        type: integer
+        type: string
       name:
         maxLength: 127
         minLength: 3
@@ -32,11 +34,12 @@ definitions:
     - name
     - surname
     type: object
-host: localhost:8080
+host: localhost:8000
 info:
   contact: {}
-  description: Client registration service that enable to manage clients and their
-    addresses, contacts and documents.
+  description: Client registration service that enable to manage clients, their addresses,
+    their contacts and their documents. In this service is also included the client
+    registration
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -45,10 +48,53 @@ info:
   version: "1.0"
 paths:
   /api/v1/clientes:
+    get:
+      consumes:
+      - application/json
+      description: List all clients
+      parameters:
+      - description: Client Name
+        in: query
+        name: name
+        type: string
+      - description: Client Name
+        in: query
+        name: surname
+        type: string
+      - description: Client email
+        format: email
+        in: query
+        name: email
+        type: string
+      - description: is cliente active?
+        in: query
+        name: active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Client'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.DefaultError'
+      summary: List Clients
+      tags:
+      - Client
     post:
       consumes:
       - application/json
       description: Create a new client and persist it at the database.
+      parameters:
+      - description: Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Client'
       produces:
       - application/json
       responses:
@@ -77,22 +123,29 @@ paths:
     get:
       consumes:
       - application/json
-      description: Perform a paginated search through the client repository geting
-        all active users
+      description: Obtains the client object based in their ID
+      parameters:
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Client'
-            type: array
-        "400":
-          description: Bad Request
+            $ref: '#/definitions/models.Client'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/errors.DefaultError'
-      summary: List all clients
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.DefaultError'
+      summary: Get client by ID
       tags:
       - Client
 swagger: "2.0"

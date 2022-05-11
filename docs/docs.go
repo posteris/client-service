@@ -22,6 +22,60 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/clientes": {
+            "get": {
+                "description": "List all clients",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Client"
+                ],
+                "summary": "List Clients",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Client Name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Client Name",
+                        "name": "surname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Client email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "is cliente active?",
+                        "name": "active",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Client"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.DefaultError"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new client and persist it at the database.",
                 "consumes": [
@@ -34,6 +88,17 @@ const docTemplate = `{
                     "Client"
                 ],
                 "summary": "Create new Client",
+                "parameters": [
+                    {
+                        "description": "Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Client"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -67,7 +132,7 @@ const docTemplate = `{
         },
         "/api/v1/clientes/{id}": {
             "get": {
-                "description": "Perform a paginated search through the client repository geting all active users",
+                "description": "Obtains the client object based in their ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -77,19 +142,31 @@ const docTemplate = `{
                 "tags": [
                     "Client"
                 ],
-                "summary": "List all clients",
+                "summary": "Get client by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Client ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Client"
-                            }
+                            "$ref": "#/definitions/models.Client"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.DefaultError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/errors.DefaultError"
                         }
@@ -126,12 +203,15 @@ const docTemplate = `{
                 "surname"
             ],
             "properties": {
+                "active": {
+                    "type": "boolean"
+                },
                 "email": {
                     "type": "string",
                     "maxLength": 125
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string",
@@ -151,11 +231,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "localhost:8000",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Client Registration service",
-	Description:      "Client registration service that enable to manage clients and their addresses, contacts and documents.",
+	Description:      "Client registration service that enable to manage clients, their addresses, their contacts and their documents. In this service is also included the client registration",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
