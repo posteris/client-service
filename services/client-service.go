@@ -18,6 +18,16 @@ func GetById(id string) *models.Client {
 	return &client
 }
 
+func List(search map[string]interface{}) ([]models.Client, error) {
+	var clientList []models.Client
+
+	dbInstance := db.GetInstance()
+
+	err := dbInstance.Where(search).Find(&clientList).Error
+
+	return clientList, err
+}
+
 func Create(client *models.Client) error {
 	dbInstance := db.GetInstance()
 

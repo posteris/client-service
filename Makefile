@@ -20,3 +20,6 @@ bench:
 test:
 	go test ./...
 
+debug:
+	go run main.go
+

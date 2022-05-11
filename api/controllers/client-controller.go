@@ -8,23 +8,6 @@ import (
 	"github.com/posteris/commons/validation"
 )
 
-// List Clientes
-// @Summary      List Clients
-// @Description  List all clients
-// @Tags         Client
-// @Accept       json
-// @Produce      json
-// @Param name 	  query string false "Client Name"
-// @Param surname query string false "Client Name"
-// @Param email   query string false "Client email" Format(email)
-// @Param active  query bool   false "is cliente active?"
-// @Success      200 {object} models.Client
-// @Failure 	 500 {object} errors.DefaultError
-// @Router       /api/v1/clientes [get]
-func ListAllClients(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusNotImplemented).JSON("{\"message\": \"Not Implemented Yet\"}")
-}
-
 // Get client By ID
 // @Summary      Get client by ID
 // @Description  Obtains the client object based in their ID
@@ -54,6 +37,47 @@ func FindClientById(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(client)
+}
+
+// List Clientes
+// @Summary      List Clients
+// @Description  List all clients
+// @Tags         Client
+// @Accept       json
+// @Produce      json
+// @Param name 	  query string false "Client Name"
+// @Param surname query string false "Client Name"
+// @Param email   query string false "Client email" Format(email)
+// @Param active  query bool   false "is cliente active?"
+// @Success      200 {object} models.Client
+// @Failure 	 500 {object} errors.DefaultError
+// @Router       /api/v1/clientes [get]
+func ListAllClients(c *fiber.Ctx) error {
+	acceptedParams := []string{"name", "surname", "email", "active"}
+	search := make(map[string]interface{})
+
+	for _, key := range acceptedParams {
+		param := c.Query(key)
+
+		if param != "" {
+			if key != "active" {
+				search[key] = param
+				continue
+			}
+
+			search[key] = param == "true"
+		}
+	}
+
+	clientList, err := services.List(search)
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			errors.CreateDefaultError(err.Error()),
+		)
+	}
+
+	return c.Status(fiber.StatusOK).JSON(clientList)
 }
 
 // CreateClient controller to create new client

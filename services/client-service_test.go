@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"testing"
 
 	"github.com/google/uuid"
@@ -155,5 +156,100 @@ func TestGetById(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestList(t *testing.T) {
+	for _, dbData := range databases {
+		t.Run(dbData.Name, func(t *testing.T) {
+			os.Setenv(database.DatabaseTypeLabel, dbData.Type)
+			os.Setenv(database.DatabaseDsnLabel, dbData.DSN)
+
+			db.InitDatabase()
+			db.Automigrate()
+
+			searchName := uuid.NewString()
+
+			var objSearch models.Client
+			for i := 0; i < 10; i++ {
+				objSearch = models.Client{
+					Name:    searchName,
+					Surname: uuid.NewString(),
+					Email:   fmt.Sprintf("%s@test.com", uuid.NewString()),
+				}
+
+				db.GetInstance().Create(&objSearch)
+			}
+
+			db.GetInstance().Create(&models.Client{
+				Name:    uuid.NewString(),
+				Surname: objSearch.Surname,
+				Email:   fmt.Sprintf("%s@test.com", uuid.NewString()),
+			})
+
+			type args struct {
+				client map[string]interface{}
+			}
+			tests := []struct {
+				name    string
+				args    args
+				length  int
+				wantErr bool
+			}{
+				{
+					name: "find10obj",
+					args: args{
+						map[string]interface{}{
+							"name": searchName,
+						},
+					},
+					length:  10,
+					wantErr: false,
+				},
+				{
+					name: "find0obj",
+					args: args{
+						map[string]interface{}{
+							"name":    searchName,
+							"surname": uuid.NewString(),
+						},
+					},
+					length:  0,
+					wantErr: false,
+				},
+				{
+					name: "find1obj",
+					args: args{
+						map[string]interface{}{
+							"name":    objSearch.Name,
+							"surname": objSearch.Surname,
+						},
+					},
+					length:  1,
+					wantErr: false,
+				},
+				{
+					name: "find2obj",
+					args: args{
+						map[string]interface{}{
+							"surname": objSearch.Surname,
+						},
+					},
+					length:  2,
+					wantErr: false,
+				},
+			}
+			for _, tt := range tests {
+				t.Run(tt.name, func(t *testing.T) {
+					got, err := List(tt.args.client)
+					if (err != nil) != tt.wantErr {
+						t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
+					}
+					if !reflect.DeepEqual(len(got), tt.length) {
+						t.Errorf("List() = %v, want %v", len(got), tt.length)
+					}
+				})
+			}
+		})
 	}
 }
