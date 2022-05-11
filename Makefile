@@ -20,6 +20,6 @@ bench:
 test:
 	go test ./...
 
-debug:
-	go run main.go
+lint:
+	golangci-lint run ./...
 
