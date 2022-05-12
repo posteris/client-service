@@ -253,3 +253,54 @@ func TestList(t *testing.T) {
 		})
 	}
 }
+
+func TestUpdate(t *testing.T) {
+	for _, dbData := range databases {
+		t.Run(dbData.Name, func(t *testing.T) {
+			os.Setenv(database.DatabaseTypeLabel, dbData.Type)
+			os.Setenv(database.DatabaseDsnLabel, dbData.DSN)
+
+			db.InitDatabase()
+			db.Automigrate()
+
+			type args struct {
+				client *models.Client
+				update *models.Client
+			}
+			tests := []struct {
+				name    string
+				args    args
+				wantErr bool
+			}{
+				{
+					name: "name-update",
+					args: args{
+						client: &models.Client{
+							Name:    uuid.NewString(),
+							Surname: uuid.NewString(),
+							Email:   fmt.Sprintf("%s@test.com", uuid.NewString()),
+						},
+						update: &models.Client{
+							Name: "New Name",
+						},
+					},
+					wantErr: false,
+				},
+			}
+			for _, tt := range tests {
+				t.Run(tt.name, func(t *testing.T) {
+					oldName := tt.args.client.Name
+
+					tt.args.client.Name = tt.args.update.Name
+					if err := Update(tt.args.client); (err != nil) != tt.wantErr {
+						t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+					}
+
+					if oldName == tt.args.client.Name {
+						t.Errorf("Update() name = %s, want %s", oldName, tt.args.client.Name)
+					}
+				})
+			}
+		})
+	}
+}

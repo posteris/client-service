@@ -37,5 +37,5 @@ func Create(client *models.Client) error {
 func Update(client *models.Client) error {
 	dbInstance := db.GetInstance()
 
-	return dbInstance.Model(client).Omit("id").Updates(client).Error
+	return dbInstance.Model(client).Omit("id").Where("id = ?", client.ID).Updates(client).Error
 }
