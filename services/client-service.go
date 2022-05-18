@@ -1,6 +1,8 @@
 package services
 
 import (
+	"errors"
+
 	"github.com/posteris/client-service/db"
 	"github.com/posteris/client-service/models"
 )
@@ -18,17 +20,25 @@ func GetById(id string) *models.Client {
 	return &client
 }
 
-func List(search map[string]interface{}) ([]models.Client, error) {
+func List(search map[string]interface{}) []models.Client {
 	var clientList []models.Client
 
 	dbInstance := db.GetInstance()
 
-	err := dbInstance.Where(search).Find(&clientList).Error
+	dbInstance.Where(search).Find(&clientList)
 
-	return clientList, err
+	return clientList
 }
 
 func Create(client *models.Client) error {
+	if client.ID != "" {
+		return errors.New("you cannot send the Client ID in the creation phase")
+	}
+
+	if client.Active {
+		return errors.New("you cannot create the Client with active status. Create it, then activate")
+	}
+
 	dbInstance := db.GetInstance()
 
 	return dbInstance.Create(client).Error
@@ -37,5 +47,11 @@ func Create(client *models.Client) error {
 func Update(client *models.Client) error {
 	dbInstance := db.GetInstance()
 
-	return dbInstance.Model(client).Omit("id").Where("id = ?", client.ID).Updates(client).Error
+	return dbInstance.Model(client).Omit("id").Omit("active").Updates(client).Error
+}
+
+func Delete(id string) error {
+	dbInstance := db.GetInstance()
+
+	return dbInstance.Delete(&models.Client{}, id).Error
 }

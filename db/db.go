@@ -23,6 +23,8 @@ func InitDatabase() {
 	}
 
 	databaseInstance = gormInstance
+
+	Automigrate()
 }
 
 func Automigrate() {

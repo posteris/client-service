@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/posteris/client-service/models"
 	"github.com/posteris/client-service/services"
@@ -61,7 +63,7 @@ func ListAllClients(c *fiber.Ctx) error {
 
 		if param != "" {
 			if key != "active" {
-				search[key] = param
+				search[key] = strings.ToLower(param)
 				continue
 			}
 
@@ -69,13 +71,7 @@ func ListAllClients(c *fiber.Ctx) error {
 		}
 	}
 
-	clientList, err := services.List(search)
-
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(
-			errors.CreateDefaultError(err.Error()),
-		)
-	}
+	clientList := services.List(search)
 
 	return c.Status(fiber.StatusOK).JSON(clientList)
 }
@@ -105,6 +101,12 @@ func CreateClient(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
+	if client.ID != "" {
+		return c.Status(fiber.StatusBadRequest).JSON(
+			errors.CreateDefaultError("The user ID cannot be sent in the body"),
+		)
+	}
+
 	if err := services.Create(client); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(
 			errors.CreateDefaultError(err.Error()),
@@ -114,8 +116,55 @@ func CreateClient(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(client)
 }
 
+// Update controller to updates client
+// @Summary      Updates Client
+// @Description  Updates client based in their ID
+// @Tags         Client
+// @Accept       json
+// @Produce      json
+// @Param body body models.Client true "Body"
+// @Success      201 {object} models.Client
+// @Failure 	 415 {object} errors.DefaultError
+// @Failure 	 400 {object} []errors.ValidationError
+// @Failure 	 500 {object} errors.DefaultError
+// @Router       /api/v1/clientes/{id} [post]
 func UpdateClientById(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusNotImplemented).JSON("{\"message\": \"Not Implemented Yet\"}")
+	client := new(models.Client)
+
+	if err := c.BodyParser(client); err != nil {
+		return c.Status(fiber.StatusUnsupportedMediaType).JSON(
+			errors.CreateDefaultError(err.Error()),
+		)
+	}
+
+	if err := validation.ValidateModel(client); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err)
+	}
+
+	//do not necessary if the model was diffrent
+	if client.ID != "" {
+		return c.Status(fiber.StatusBadRequest).JSON(
+			errors.CreateDefaultError("The user ID cannot be sent in the body"),
+		)
+	}
+
+	id := c.Params("id")
+
+	if id == "" {
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			errors.CreateDefaultError("Client ID is required at the URL path"),
+		)
+	}
+
+	client.ID = id
+
+	if err := services.Update(client); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			errors.CreateDefaultError(err.Error()),
+		)
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(client)
 }
 
 func DeleteClientById(c *fiber.Ctx) error {

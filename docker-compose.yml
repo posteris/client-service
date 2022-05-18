@@ -1,0 +1,39 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: ci-database-postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  mysql:
+    container_name: ci-database-mysql
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: mysql
+    ports:
+      - "3306:3306"
+
+  # clickhouse:
+  #   container_name: ci-database-clickhouse
+  #   image: yandex/clickhouse-server
+  #   ports:
+  #   - "8123:8123"
+  #   - "9000:9000"
+  #   - "9009:9009"
+  
+  mssql-server:
+    container_name: ci-database-mssql 
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Adm1n123"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+

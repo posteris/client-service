@@ -6,6 +6,7 @@ require (
 	github.com/arsmn/fiber-swagger/v2 v2.31.1
 	github.com/gofiber/fiber/v2 v2.31.0
 	github.com/google/uuid v1.3.0
+	github.com/posteris/ci-database-starter/conn-data v0.0.0-20220513152026-5e5a296d7fde
 	github.com/posteris/commons v1.2.2
 	github.com/posteris/database v1.1.0
 	github.com/stretchr/testify v1.7.1
@@ -59,7 +60,6 @@ require (
 	github.com/klauspost/compress v1.15.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-sqlite3 v1.14.12 // indirect
-	github.com/posteris/ci-database-starter/conn-data v0.0.0-20220421041837-6c7733aca6e8
 	github.com/posteris/custom-validate v0.0.0-20220401195619-ea115f6b44db // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.34.0 // indirect

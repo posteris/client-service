@@ -17,16 +17,13 @@ definitions:
       active:
         type: boolean
       email:
-        maxLength: 125
         type: string
       id:
         type: string
       name:
-        maxLength: 127
         minLength: 3
         type: string
       surname:
-        maxLength: 255
         minLength: 3
         type: string
     required:
@@ -146,6 +143,41 @@ paths:
           schema:
             $ref: '#/definitions/errors.DefaultError'
       summary: Get client by ID
+      tags:
+      - Client
+    post:
+      consumes:
+      - application/json
+      description: Updates client based in their ID
+      parameters:
+      - description: Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Client'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Client'
+        "400":
+          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/errors.ValidationError'
+            type: array
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/errors.DefaultError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.DefaultError'
+      summary: Updates Client
       tags:
       - Client
 swagger: "2.0"
